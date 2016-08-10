@@ -18,10 +18,9 @@
     <string name="today">Todady</string>
     <string name="tomorrow">Tomorrow</string>
 
-
+    <string name="id_imsak">Imsak</string>
     <string name="id_fajr">Fajr</string>
     <string name="id_sunrise">Sunrise</string>
-    <string name="id_dhuha">Dhuha</string>
     <string name="id_dhuhr">Dhuhr</string>
     <string name="id_asr">Asr</string>
     <string name="id_maghrib">Maghrib</string>
