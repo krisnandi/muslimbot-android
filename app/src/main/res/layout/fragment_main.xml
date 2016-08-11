@@ -95,15 +95,29 @@
                 android:padding="10dp"
                 android:layout_marginBottom="5dp">
 
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Cipayung"
-                    android:id="@+id/textView7"
-                    android:textSize="20dp"
-                    android:textIsSelectable="false"
-                    android:maxLines="1"/>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView"
+                        android:background="@drawable/ic_place_black_24dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Cipayung"
+                        android:id="@+id/textLocation"
+                        android:textSize="20dp"
+                        android:textIsSelectable="false"
+                        android:maxLines="1"/>
+
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -117,23 +131,38 @@
                 android:padding="10dp"
                 android:layout_marginBottom="5dp">
 
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Tuesday, 9 August 2016"
-                    android:id="@+id/textView6"
-                    android:textSize="20dp"
-                    android:textIsSelectable="false"
-                    android:maxLines="1"/>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView2"
+                        android:background="@drawable/ic_insert_invitation_black_24dp"
+                        android:layout_marginTop="1dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Tuesday, 9 August 2016"
+                        android:id="@+id/textCalender"
+                        android:textSize="20dp"
+                        android:textIsSelectable="false"
+                        android:maxLines="1"/>
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/mylayout_01"
-                android:layout_marginBottom="5dp">
+                android:layout_marginBottom="5dp"
+                android:baselineAligned="false">
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -142,8 +171,11 @@
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:padding="10dp"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="5dp">
 
                     <LinearLayout
                         android:orientation="horizontal"
@@ -155,35 +187,65 @@
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceLarge"
                             android:text="Now"
-                            android:id="@+id/textView3"
-                            android:background="@drawable/mybutton_01"
+                            android:id="@+id/fajr_now"
+                            android:background="@drawable/mynowlayout"
                             android:paddingLeft="5dp"
                             android:paddingRight="5dp"
-                            android:layout_marginRight="5dp"/>
+                            android:layout_marginRight="5dp"
+                            android:textColor="#ffffff"
+                            android:textSize="16dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceLarge"
                             android:text="Fajr"
-                            android:id="@+id/textView4"/>
+                            android:id="@+id/fajr_info"
+                            android:textSize="16dp"/>
                     </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="04:30"
-                        android:id="@+id/textView8"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:weightSum="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="04:30"
+                            android:id="@+id/fajr_time"
+                            android:textSize="16dp"/>
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            />
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/fajr_check"
+                            android:button="@drawable/mynotiftoggle_01"
+                            android:background="@null"
+                            android:layout_marginRight="5dp"
+                            android:checked="false"/>
+
+                    </LinearLayout>
+
                 </LinearLayout>
             </LinearLayout>
+
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/mylayout_01"
-                android:layout_marginBottom="5dp">
+                android:layout_marginBottom="5dp"
+                android:baselineAligned="false">
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -192,8 +254,11 @@
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:padding="10dp"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="5dp">
 
                     <LinearLayout
                         android:orientation="horizontal"
@@ -205,35 +270,65 @@
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceLarge"
                             android:text="Next"
-                            android:id="@+id/textView15"
-                            android:background="@drawable/mybutton_01"
+                            android:id="@+id/dhuhr_next"
+                            android:background="@drawable/mynextlayout"
                             android:paddingLeft="5dp"
                             android:paddingRight="5dp"
-                            android:layout_marginRight="5dp"/>
+                            android:layout_marginRight="5dp"
+                            android:textColor="#ffffff"
+                            android:textSize="16dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="Dhuhr in 1 Hour 43 Minutes"
-                            android:id="@+id/textView16"/>
+                            android:text="Dhuhr in 1 Hour 53 Minutes"
+                            android:id="@+id/dhuhr_info"
+                            android:textSize="16dp"/>
                     </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="12:08"
-                        android:id="@+id/textView17"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:weightSum="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="04:30"
+                            android:id="@+id/dhuhr_time"
+                            android:textSize="16dp"/>
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            />
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/dhuhr_check"
+                            android:button="@drawable/mynotiftoggle_01"
+                            android:background="@null"
+                            android:layout_marginRight="5dp"
+                            android:checked="false"/>
+
+                    </LinearLayout>
+
                 </LinearLayout>
             </LinearLayout>
+
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/mylayout_01"
-                android:layout_marginBottom="5dp">
+                android:layout_marginBottom="5dp"
+                android:baselineAligned="false">
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -242,8 +337,11 @@
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:padding="10dp"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="5dp">
 
                     <LinearLayout
                         android:orientation="horizontal"
@@ -254,25 +352,53 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="Ashr"
-                            android:id="@+id/textView13"/>
+                            android:text="Asr"
+                            android:id="@+id/asr_info"
+                            android:textSize="16dp"/>
                     </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="04:30"
-                        android:id="@+id/textView14"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:weightSum="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="04:30"
+                            android:id="@+id/asr_time"
+                            android:textSize="16dp"/>
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            />
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/asr_check"
+                            android:button="@drawable/mynotiftoggle_01"
+                            android:background="@null"
+                            android:layout_marginRight="5dp"
+                            android:checked="false"/>
+
+                    </LinearLayout>
+
                 </LinearLayout>
             </LinearLayout>
+
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/mylayout_01"
-                android:layout_marginBottom="5dp">
+                android:layout_marginBottom="5dp"
+                android:baselineAligned="false">
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -281,8 +407,11 @@
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:padding="10dp"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="5dp">
 
                     <LinearLayout
                         android:orientation="horizontal"
@@ -294,25 +423,52 @@
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceLarge"
                             android:text="Maghrib"
-                            android:id="@+id/textView10"/>
+                            android:id="@+id/maghrib_info"
+                            android:textSize="16dp"/>
                     </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="18:10"
-                        android:id="@+id/textView11"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:weightSum="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="04:30"
+                            android:id="@+id/maghrib_time"
+                            android:textSize="16dp"/>
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            />
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/maghrib_check"
+                            android:button="@drawable/mynotiftoggle_01"
+                            android:background="@null"
+                            android:layout_marginRight="5dp"
+                            android:checked="false"/>
+
+                    </LinearLayout>
+
                 </LinearLayout>
             </LinearLayout>
+
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/mylayout_01"
-                android:layout_marginBottom="5dp">
-                android:background="@drawable/mylayout_01"
+                android:layout_marginBottom="5dp"
+                android:baselineAligned="false">
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -321,8 +477,11 @@
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:padding="10dp"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="5dp">
 
                     <LinearLayout
                         android:orientation="horizontal"
@@ -334,21 +493,58 @@
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceLarge"
                             android:text="Ishaa"
-                            android:id="@+id/textView"/>
+                            android:id="@+id/isha_ishaa"
+                            android:textSize="16dp"/>
                     </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="19:10"
-                        android:id="@+id/textView5"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:weightSum="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="04:30"
+                            android:id="@+id/isha_time"
+                            android:textSize="16dp"/>
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            />
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/isha_check"
+                            android:button="@drawable/mynotiftoggle_01"
+                            android:background="@null"
+                            android:layout_marginRight="5dp"
+                            android:checked="false"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
-
             </LinearLayout>
 
+
+
+
+
+
+
+
+
+
+
+
+
         </LinearLayout>
+
     </ScrollView>
 
 
