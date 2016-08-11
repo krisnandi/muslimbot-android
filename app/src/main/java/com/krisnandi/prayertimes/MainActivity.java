@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        userData.getInstance().getData();
+
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
