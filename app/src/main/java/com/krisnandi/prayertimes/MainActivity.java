@@ -1,23 +1,14 @@
 package com.krisnandi.prayertimes;
 
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
 
@@ -54,20 +45,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        userData.getInstance().getData();
-
-        GPSTracker gps = new GPSTracker(this);
-        Log.d("testingx", String.valueOf(gps.isGPSEnabled));
 
 
-        double latitude = gps.getLatitude();
-        double longitude = gps.getLongitude();
-
-        Log.d("testingx", String.valueOf(latitude));
-        Log.d("testingy", String.valueOf(longitude));
-
-
-        getLocationName();
+        Log.d("testing", item.toString());
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
@@ -81,31 +61,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     @Override
     public void onLocationChanged(Location location) {
-        getLocationName();
-
-
 
     }
 
-    private void getLocationName()
-    {
-        Log.d("testingx", "zzzz");
-        Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
-        StringBuilder builder = new StringBuilder();
-        try {
-            GPSTracker gps = new GPSTracker(this);
-            double latitude = gps.getLatitude();
-            double longitude = gps.getLongitude();
 
-            Geocoder gcd = new Geocoder(this, Locale.getDefault());
-            List<Address> addresses = gcd.getFromLocation(latitude, longitude, 1);
-            if (addresses.size() > 0)
-                Log.d("testingx", addresses.get(0).getLocality());
-
-        } catch (IOException e) {}
-        catch (NullPointerException e) {}
-
-    }
 
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {
@@ -119,6 +78,20 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     @Override
     public void onProviderDisabled(String s) {
+
+    }
+
+    private void updateUserData(){
+        GPSTracker gps = new GPSTracker(this);
+        //Log.d("testingx", String.valueOf(gps.isGPSEnabled));
+
+        double latitude = gps.getLatitude();
+        double longitude = gps.getLongitude();
+
+        userData.getInstance(this).latitude = latitude;
+        userData.getInstance(this).longitude = longitude;
+
+        userData.getInstance(this).updateData();
 
     }
 }

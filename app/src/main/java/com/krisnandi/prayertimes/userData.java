@@ -1,12 +1,11 @@
 package com.krisnandi.prayertimes;
 
-import android.app.Activity;
-import android.location.LocationManager;
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.AsyncTask;
-import android.util.JsonReader;
 import android.util.Log;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,6 +19,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -27,40 +27,40 @@ import java.util.TimeZone;
  * Created by Irnanto on 11-Aug-16.
  */
 public class userData {
-    private static userData ourInstance = new userData();
-    public static userData getInstance() {
+    private static userData ourInstance;// = new userData();
+
+    private final Context mContext;
+
+    public double latitude;
+    public double longitude;
+
+    public String locationName;
+    public String currentDate;
+    public String time_fajr;
+    public String time_sunrise;
+    public String time_dhuhr;
+    public String time_asr;
+    public String time_maghrib;
+    public String time_ishaa;
+
+
+    public static userData getInstance(Context context) {
+        if(ourInstance == null)
+            ourInstance = new userData(context);
         return ourInstance;
     }
 
-    private userData() {
-
+    private userData(Context context) {
+        this.mContext = context;
     }
 
-    public void getData(){
-        Log.d("testing", getCurrentDate());
-        Log.d("testing", getCurrentTimeStamp());
+    public void updateData(){
 
-        //Log.d("testing", TimeZone.getDefault().getDisplayName());
-        //Log.d("testing", TimeZone.getDefault().getID());
-
-
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.getDefault());
-        Date currentLocalTime = calendar.getTime();
-        DateFormat date = new SimpleDateFormat("Z");
-        String localTime = date.format(currentLocalTime);
-
-        Log.d("testing", localTime);
-
-
-
-
-
-        //new DownloadFilesTask().execute();
+        new DownloadFilesTask().execute();
     }
 
     private String getCurrentDate(){
         try {
-
             //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss");
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd MMMM yyyy");
             String currentTimeStamp = dateFormat.format(new Date()); // Find todays date
@@ -87,6 +87,33 @@ public class userData {
         }
     }
 
+    private String getLocationName(double latitude, double longitude)
+    {
+        String location = "";
+        try {
+            Geocoder gcd = new Geocoder(mContext, Locale.getDefault());
+            List<Address> addresses = gcd.getFromLocation(latitude, longitude, 1);
+            if (addresses.size() > 0) {
+                location = addresses.get(0).getLocality();
+            }
+        } catch (IOException e) {}
+        catch (NullPointerException e) {}
+
+        return location;
+    }
+
+    private String getCurrentLocalTIme(){
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.getDefault());
+        Date currentLocalTime = calendar.getTime();
+        DateFormat date = new SimpleDateFormat("Z");
+        String localTime = date.format(currentLocalTime);
+        return localTime;
+    }
+
+    private String getCurrentTimeZone(){
+        return TimeZone.getDefault().getID();
+    }
+
 
     private class DownloadFilesTask extends AsyncTask<Void, Void, Void> {
         @Override
@@ -111,9 +138,32 @@ public class userData {
         protected Void doInBackground(Void... params) {
             //do your work here
 
-            Log.d("testing", "0 wew do in background");
+            //Set GPSTracker
+            //GPSTracker gps = new GPSTracker(mContext);
 
-            String dataURL = "http://api.aladhan.com/timings/1398332113?latitude=51.508515&longitude=-0.1254872&timezonestring=Europe/London&method=2";
+            //get gps latitude and longitude
+            //double latitude = gps.getLatitude();
+            //double longitude = gps.getLongitude();
+
+            //update location name
+            locationName = getLocationName(latitude, longitude);
+
+            Log.d("testing 1", String.valueOf(latitude));
+            Log.d("testing 2", String.valueOf(longitude));
+            Log.d("testing 3", locationName);
+
+            //update current date
+            currentDate = getCurrentDate();
+
+            String dataURL = "http://api.aladhan.com/timings/"+ getCurrentTimeStamp()
+                    +"?latitude=" + String.valueOf(latitude)
+                    + "&longitude=" + String.valueOf(longitude)
+                    + "&timezonestring=" + getCurrentTimeZone()
+                    +"&method=5";
+
+            Log.d("testing", dataURL);
+
+            //String dataURL = "http://api.aladhan.com/timings/1398332113?latitude=51.508515&longitude=-0.1254872&timezonestring=Europe/London&method=2";
             //String dataURL = "http://api.aladhan.com/timings/1398332113";
 
             HttpURLConnection urlConnection  = null;
@@ -182,23 +232,28 @@ public class userData {
             try {
                 JSONObject jsonAll = new JSONObject(forecastJsonStr);
 
-                Log.d("testing", jsonAll.getString("code"));
-                Log.d("testing", jsonAll.getString("status"));
-                Log.d("testing", jsonAll.getString("data"));
+                //Log.d("testing", jsonAll.getString("code"));
+                //Log.d("testing", jsonAll.getString("status"));
+                //Log.d("testing", jsonAll.getString("data"));
 
-                //JSONObject jsonData = new JSONObject(jsonAll.getString("data"));
                 JSONObject jsonData = jsonAll.getJSONObject("data");
-                Log.d("testing", jsonData.getString("timings"));
-                Log.d("testing", jsonData.getString("date"));
+                //Log.d("testing", jsonData.getString("timings"));
+                //Log.d("testing", jsonData.getString("date"));
 
                 JSONObject jsonTimings = jsonData.getJSONObject("timings");
-                Log.d("testing", jsonTimings.getString("Fajr"));
-                Log.d("testing", jsonTimings.getString("Sunrise"));
-                Log.d("testing", jsonTimings.getString("Dhuhr"));
-                Log.d("testing", jsonTimings.getString("Asr"));
-                Log.d("testing", jsonTimings.getString("Maghrib"));
-                Log.d("testing", jsonTimings.getString("Isha"));
+                time_fajr = jsonTimings.getString("Fajr");
+                time_sunrise = jsonTimings.getString("Sunrise");
+                time_dhuhr = jsonTimings.getString("Dhuhr");
+                time_asr = jsonTimings.getString("Asr");
+                time_maghrib = jsonTimings.getString("Maghrib");
+                time_ishaa = jsonTimings.getString("Isha");
 
+                //Log.d("testing", time_fajr);
+                //Log.d("testing", time_sunrise);
+                //Log.d("testing", time_dhuhr);
+                //Log.d("testing", time_asr);
+                //Log.d("testing", time_maghrib);
+                //Log.d("testing", time_ishaa);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -219,6 +274,8 @@ public class userData {
 
             Log.d("testing", "wew on post execute");
         }
+
+
     }
 
 

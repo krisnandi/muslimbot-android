@@ -2,9 +2,28 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="com.krisnandi.prayertimes.MainActivity">
+
+    <!-- "Mark Favorite", should appear as action button if possible -->
+    <item
+        android:id="@+id/action_refresh"
+        android:icon="@drawable/ic_autorenew_black_24dp"
+        android:title="@string/action_refresh"
+        app:showAsAction="ifRoom"/>
+
+
+    <item
+        android:id="@+id/rate_app"
+        android:orderInCategory="100"
+        android:title="@string/action_rateapp"
+        app:showAsAction="never"/>
+
+
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never"/>
+
+
+
 </menu>
