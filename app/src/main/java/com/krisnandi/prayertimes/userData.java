@@ -1,7 +1,14 @@
 package com.krisnandi.prayertimes;
 
+import android.app.Activity;
+import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.util.JsonReader;
 import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,6 +16,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by Irnanto on 11-Aug-16.
@@ -24,75 +37,54 @@ public class userData {
     }
 
     public void getData(){
-        Log.d("testing", "wew");
-        new DownloadFilesTask().execute();
+        Log.d("testing", getCurrentDate());
+        Log.d("testing", getCurrentTimeStamp());
+
+        //Log.d("testing", TimeZone.getDefault().getDisplayName());
+        //Log.d("testing", TimeZone.getDefault().getID());
+
+
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.getDefault());
+        Date currentLocalTime = calendar.getTime();
+        DateFormat date = new SimpleDateFormat("Z");
+        String localTime = date.format(currentLocalTime);
+
+        Log.d("testing", localTime);
+
+
+
+
+
+        //new DownloadFilesTask().execute();
     }
 
-
-    private void HTTPGet() {
-        //String dataUrl = "http://api.aladhan.com/timings/1398332113?latitude=51.508515&longitude=-0.1254872&timezonestring=1&method=2";
-        String dataUrl = "http://api.aladhan.com/timings/1398332113";
-
-        // These two need to be declared outside the try/catch
-        // so that they can be closed in the finally block.
-        HttpURLConnection urlConnection = null;
-        BufferedReader reader = null;
-
-        // Will contain the raw JSON response as a string.
-        String forecastJsonStr = null;
-
+    private String getCurrentDate(){
         try {
-            // Construct the URL for the OpenWeatherMap query
-            // Possible parameters are avaiable at OWM's forecast API page, at
-            // http://openweathermap.org/API#forecast
-            URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7");
 
-            // Create the request to OpenWeatherMap, and open the connection
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.connect();
+            //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd MMMM yyyy");
+            String currentTimeStamp = dateFormat.format(new Date()); // Find todays date
 
-            // Read the input stream into a String
-            InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
-            if (inputStream == null) {
-                // Nothing to do.
-                //return null;
-            }
-            reader = new BufferedReader(new InputStreamReader(inputStream));
+            return currentTimeStamp;
+        } catch (Exception e) {
+            e.printStackTrace();
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                // But it does make debugging a *lot* easier if you print out the completed
-                // buffer for debugging.
-                buffer.append(line + "\n");
-            }
-
-            if (buffer.length() == 0) {
-                // Stream was empty.  No point in parsing.
-                //return null;
-            }
-            forecastJsonStr = buffer.toString();
-        } catch (IOException e) {
-            Log.e("PlaceholderFragment", "Error ", e);
-            // If the code didn't successfully get the weather data, there's no point in attemping
-            // to parse it.
-            //return null;
-        } finally{
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (final IOException e) {
-                    Log.e("PlaceholderFragment", "Error closing stream", e);
-                }
-            }
+            return null;
         }
-        Log.d("testing", forecastJsonStr);
+    }
 
+    private String getCurrentTimeStamp(){
+        try {
+
+            Long tsLong = System.currentTimeMillis()/1000;
+            String currentTimeStamp = tsLong.toString();
+
+            return currentTimeStamp;
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return null;
+        }
     }
 
 
@@ -121,8 +113,9 @@ public class userData {
 
             Log.d("testing", "0 wew do in background");
 
-            //String dataURL = "http://api.aladhan.com/timings/1398332113?latitude=51.508515&longitude=-0.1254872&timezonestring=Europe/London&method=2";
-            String dataURL = "http://api.aladhan.com/timings/1398332113";
+            String dataURL = "http://api.aladhan.com/timings/1398332113?latitude=51.508515&longitude=-0.1254872&timezonestring=Europe/London&method=2";
+            //String dataURL = "http://api.aladhan.com/timings/1398332113";
+
             HttpURLConnection urlConnection  = null;
             BufferedReader reader = null;
 
@@ -133,10 +126,12 @@ public class userData {
                 URL url = new URL(dataURL);
                 urlConnection  = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
-                urlConnection.setRequestProperty("latitude","51.508515");
-                urlConnection.setRequestProperty("longitude","-0.1254872");
-                urlConnection.setRequestProperty("timezonestring","Europe/London");
-                urlConnection.setRequestProperty("method","2");
+
+                //urlConnection.setRequestProperty("latitude","51.508515");
+                //urlConnection.setRequestProperty("longitude","-0.1254872");
+                //urlConnection.setRequestProperty("timezonestring","Europe/London");
+                //urlConnection.setRequestProperty("method","2");
+
                 //urlConnection.setUseCaches(false);
                 //urlConnection.setDoInput(true);
                 //urlConnection.setDoOutput(true);
@@ -167,7 +162,7 @@ public class userData {
                 Log.d("testing 2", forecastJsonStr);
             }
             catch (IOException e) {
-                Log.e("testingxxx", "Error ", e);
+                Log.e("testing", "Error ", e);
                 //Handles input and output errors
             }
             finally {
@@ -183,9 +178,34 @@ public class userData {
                 }
             }
 
-            Log.d("testing", "1 wew do in background");
-            Log.d("testing", forecastJsonStr);
-            Log.d("testing", "2 wew do in background");
+
+            try {
+                JSONObject jsonAll = new JSONObject(forecastJsonStr);
+
+                Log.d("testing", jsonAll.getString("code"));
+                Log.d("testing", jsonAll.getString("status"));
+                Log.d("testing", jsonAll.getString("data"));
+
+                //JSONObject jsonData = new JSONObject(jsonAll.getString("data"));
+                JSONObject jsonData = jsonAll.getJSONObject("data");
+                Log.d("testing", jsonData.getString("timings"));
+                Log.d("testing", jsonData.getString("date"));
+
+                JSONObject jsonTimings = jsonData.getJSONObject("timings");
+                Log.d("testing", jsonTimings.getString("Fajr"));
+                Log.d("testing", jsonTimings.getString("Sunrise"));
+                Log.d("testing", jsonTimings.getString("Dhuhr"));
+                Log.d("testing", jsonTimings.getString("Asr"));
+                Log.d("testing", jsonTimings.getString("Maghrib"));
+                Log.d("testing", jsonTimings.getString("Isha"));
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            //Log.d("testing", forecastJsonStr);
+            //Log.d("testingzxzxzx", tes.toString());
             return null;
         }
 
