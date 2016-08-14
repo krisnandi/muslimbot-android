@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -18,8 +19,11 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -28,6 +32,8 @@ import java.util.TimeZone;
  */
 public class userData {
     private static userData ourInstance;// = new userData();
+
+    public DelegateBehaviour delegateBehaviour;
 
     private final Context mContext;
 
@@ -55,8 +61,11 @@ public class userData {
     }
 
     public void updateData(){
-
         new DownloadFilesTask().execute();
+    }
+
+    public void setBehaviour(DelegateBehaviour behaviour){
+        delegateBehaviour = behaviour;
     }
 
     private String getCurrentDate(){
@@ -248,16 +257,20 @@ public class userData {
                 time_maghrib = jsonTimings.getString("Maghrib");
                 time_ishaa = jsonTimings.getString("Isha");
 
-                //Log.d("testing", time_fajr);
-                //Log.d("testing", time_sunrise);
-                //Log.d("testing", time_dhuhr);
-                //Log.d("testing", time_asr);
-                //Log.d("testing", time_maghrib);
-                //Log.d("testing", time_ishaa);
+                Log.d("testing", time_fajr);
+                Log.d("testing", time_sunrise);
+                Log.d("testing", time_dhuhr);
+                Log.d("testing", time_asr);
+                Log.d("testing", time_maghrib);
+                Log.d("testing", time_ishaa);
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
+            //delegateBehaviour.onDelegateVoid();
+
+
 
             //Log.d("testing", forecastJsonStr);
             //Log.d("testingzxzxzx", tes.toString());
@@ -272,7 +285,9 @@ public class userData {
              *    close any dialogs/ProgressBars/etc...
             */
 
-            Log.d("testing", "wew on post execute");
+            //Log.d("testing", "wew on post execute");
+            delegateBehaviour.onDelegateVoid();
+
         }
 
 
