@@ -4,12 +4,14 @@ import android.animation.TimeAnimator;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationListener;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -115,7 +117,20 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     private void updateUserData(){
+        if(!userData.getInstance(this).isNetworkAvailable()){
+            Log.d("testing", "no internet");
+            alertNoInternet();
+            return;
+        }
+
         GPSTracker gps = new GPSTracker(this);
+
+        if(!gps.isGPSEnabled){
+
+            Log.d("testing", "no gps");
+            alertNoGPS();
+            return;
+        }
 
         double latitude = gps.getLatitude();
         double longitude = gps.getLongitude();
@@ -294,7 +309,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             }
         }
 
-        /*
+
         if(isAfterishaa){
             mNowIshaa.setVisibility(View.VISIBLE);
             mNextFajr.setVisibility(View.VISIBLE);
@@ -312,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             String text = fajrInfo.getText() + userData.getInstance(this).timeBetween(currentTime, fajrTime);
             fajrInfo.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
         }
-        */
+
     }
 
     private String combinePrayerDateTime(String str_date, String str_time)
@@ -327,8 +342,48 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
             // compare current time and decide if it's 12 AM
             Log.d("MyDateChangeReceiver", "Time changed");
-
+            updateTheSchedule();
         }
+    }
+
+    private void alertNoInternet() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("No Internet!");
+        builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //TODO
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("Retry", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //TODO
+                updateUserData();
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void alertNoGPS() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Activate your GPS!");
+        builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //TODO
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("Retry", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //TODO
+                updateUserData();
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 }

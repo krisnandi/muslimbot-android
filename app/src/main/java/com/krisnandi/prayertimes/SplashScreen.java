@@ -1,8 +1,10 @@
 package com.krisnandi.prayertimes;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 /**
@@ -46,7 +48,21 @@ public class SplashScreen extends Activity implements DelegateBehaviour {
     }
 
     private void updateUserData(){
+
+        if(!userData.getInstance(this).isNetworkAvailable()){
+            Log.d("testing", "no internet");
+            alertNoInternet();
+            return;
+        }
+
         GPSTracker gps = new GPSTracker(this);
+
+        if(!gps.isGPSEnabled){
+
+            Log.d("testing", "no gps");
+            alertNoGPS();
+            return;
+        }
 
         double latitude = gps.getLatitude();
         double longitude = gps.getLongitude();
@@ -64,5 +80,49 @@ public class SplashScreen extends Activity implements DelegateBehaviour {
     public void onDelegateVoid() {
         Log.d("testing", "Go to Main Menu");
         timerThread.start();
+    }
+
+    private void alertNoInternet() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("No Internet!");
+        builder.setPositiveButton("Quit", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //TODO
+                finish();
+                System.exit(0);
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("Retry", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //TODO
+                updateUserData();
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void alertNoGPS() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Activate your GPS!");
+        builder.setPositiveButton("Quit", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //TODO
+                finish();
+                System.exit(0);
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("Retry", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //TODO
+                updateUserData();
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
