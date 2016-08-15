@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.net.Uri;
@@ -19,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +29,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     private final MyTimeChangeReceiver myTimeChangeReceiver = new MyTimeChangeReceiver();
 
+    SharedPreferences sharedPref;// = getPreferences(Context.MODE_PRIVATE);
+    SharedPreferences.Editor editor;// = sharedPref.edit();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +40,28 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        sharedPref = getPreferences(Context.MODE_PRIVATE);
+        editor = sharedPref.edit();
+
+
+        CheckBox fajrcheck = (CheckBox) findViewById(R.id.fajr_check);
+        fajrcheck.setChecked(sharedPref.getBoolean(getString(R.string.id_fajr), false));
+
+        CheckBox sunrisecheck = (CheckBox) findViewById(R.id.sunrise_check);
+        sunrisecheck.setChecked(sharedPref.getBoolean(getString(R.string.id_sunrise), false));
+
+        CheckBox dhuhrcheck = (CheckBox) findViewById(R.id.dhuhr_check);
+        dhuhrcheck.setChecked(sharedPref.getBoolean(getString(R.string.id_dhuhr), false));
+
+        CheckBox asrcheck = (CheckBox) findViewById(R.id.asr_check);
+        asrcheck.setChecked(sharedPref.getBoolean(getString(R.string.id_asr), false));
+
+        CheckBox maghribcheck = (CheckBox) findViewById(R.id.maghrib_check);
+        maghribcheck.setChecked(sharedPref.getBoolean(getString(R.string.id_maghrib), false));
+
+        CheckBox ishaacheck = (CheckBox) findViewById(R.id.isha_check);
+        ishaacheck.setChecked(sharedPref.getBoolean(getString(R.string.id_ishaa), false));
 
         //updateUserData();
         updateTheSchedule();
@@ -384,6 +412,37 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+
+    public void onCheckboxClicked(View view) {
+        // Is the view now checked?
+        boolean checked = ((CheckBox) view).isChecked();
+
+        // Check which checkbox was clicked
+        switch(view.getId()) {
+            case R.id.fajr_check:
+                editor.putBoolean(getString(R.string.id_fajr), checked);
+                break;
+            case R.id.sunrise_check:
+                editor.putBoolean(getString(R.string.id_sunrise), checked);
+                break;
+            case R.id.dhuhr_check:
+                editor.putBoolean(getString(R.string.id_dhuhr), checked);
+                break;
+            case R.id.asr_check:
+                editor.putBoolean(getString(R.string.id_asr), checked);
+                break;
+            case R.id.maghrib_check:
+                editor.putBoolean(getString(R.string.id_maghrib), checked);
+                break;
+            case R.id.isha_check:
+                editor.putBoolean(getString(R.string.id_ishaa), checked);
+                break;
+            // TODO: Veggie sandwich
+        }
+
+        editor.commit();
     }
 
 }
