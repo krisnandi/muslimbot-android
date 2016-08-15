@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 public class MainActivityFragment extends Fragment implements DelegateBehaviour {
 
     public MainActivityFragment() {
-        Log.d("testing", "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
+
     }
 
     @Override
@@ -33,14 +33,12 @@ public class MainActivityFragment extends Fragment implements DelegateBehaviour 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("testing", "wwwwwwwwwwwwwwwwwwwwwww");
-
 
 
     }
 
     @Override
     public void onDelegateVoid() {
-        Log.d("testing", "delegate work 2");
+
     }
 }

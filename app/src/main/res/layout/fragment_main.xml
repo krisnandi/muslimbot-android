@@ -186,6 +186,20 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="Next"
+                            android:id="@+id/fajr_next"
+                            android:background="@drawable/mynextlayout"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_marginRight="5dp"
+                            android:textColor="#ffffff"
+                            android:textSize="16dp"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
                             android:text="Now"
                             android:id="@+id/fajr_now"
                             android:background="@drawable/mynowlayout"
@@ -193,7 +207,8 @@
                             android:paddingRight="5dp"
                             android:layout_marginRight="5dp"
                             android:textColor="#ffffff"
-                            android:textSize="16dp"/>
+                            android:textSize="16dp"
+                            />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -228,6 +243,102 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/fajr_check"
+                            android:button="@drawable/mynotiftoggle_01"
+                            android:background="@null"
+                            android:layout_marginRight="5dp"
+                            android:checked="false"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/mylayout_01"
+                android:layout_marginBottom="5dp"
+                android:baselineAligned="false">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_weight="1"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="5dp">
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="Next"
+                            android:id="@+id/sunrise_next"
+                            android:background="@drawable/mynextlayout"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_marginRight="5dp"
+                            android:textColor="#ffffff"
+                            android:textSize="16dp"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="Past"
+                            android:id="@+id/sunrise_now"
+                            android:background="@drawable/mypastlayout"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_marginRight="5dp"
+                            android:textColor="#ffffff"
+                            android:textSize="16dp"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="Sunrise"
+                            android:id="@+id/sunrise_info"
+                            android:textSize="16dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:weightSum="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="04:30"
+                            android:id="@+id/sunrise_time"
+                            android:textSize="16dp"/>
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            />
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/sunrise_check"
                             android:button="@drawable/mynotiftoggle_01"
                             android:background="@null"
                             android:layout_marginRight="5dp"
@@ -276,13 +387,28 @@
                             android:paddingRight="5dp"
                             android:layout_marginRight="5dp"
                             android:textColor="#ffffff"
-                            android:textSize="16dp"/>
+                            android:textSize="16dp"
+                            />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="Dhuhr in 1 Hour 53 Minutes"
+                            android:text="Now"
+                            android:id="@+id/dhuhr_now"
+                            android:background="@drawable/mynowlayout"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_marginRight="5dp"
+                            android:textColor="#ffffff"
+                            android:textSize="16dp"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="Dhuhr"
                             android:id="@+id/dhuhr_info"
                             android:textSize="16dp"/>
                     </LinearLayout>
@@ -347,6 +473,34 @@
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="Next"
+                            android:id="@+id/asr_next"
+                            android:background="@drawable/mynextlayout"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_marginRight="5dp"
+                            android:textColor="#ffffff"
+                            android:textSize="16dp"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="Now"
+                            android:id="@+id/asr_now"
+                            android:background="@drawable/mynowlayout"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_marginRight="5dp"
+                            android:textColor="#ffffff"
+                            android:textSize="16dp"
+                            />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -422,7 +576,35 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="Maghrib"
+                            android:text="Next"
+                            android:id="@+id/maghrib_next"
+                            android:background="@drawable/mynextlayout"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_marginRight="5dp"
+                            android:textColor="#ffffff"
+                            android:textSize="16dp"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="Now"
+                            android:id="@+id/maghrib_now"
+                            android:background="@drawable/mynowlayout"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_marginRight="5dp"
+                            android:textColor="#ffffff"
+                            android:textSize="16dp"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="Maghribzzz"
                             android:id="@+id/maghrib_info"
                             android:textSize="16dp"/>
                     </LinearLayout>
@@ -492,8 +674,36 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="Next"
+                            android:id="@+id/isha_next"
+                            android:background="@drawable/mynextlayout"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_marginRight="5dp"
+                            android:textColor="#ffffff"
+                            android:textSize="16dp"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="Now"
+                            android:id="@+id/isha_now"
+                            android:background="@drawable/mynowlayout"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_marginRight="5dp"
+                            android:textColor="#ffffff"
+                            android:textSize="16dp"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
                             android:text="Ishaa"
-                            android:id="@+id/isha_ishaa"
+                            android:id="@+id/isha_info"
                             android:textSize="16dp"/>
                     </LinearLayout>
 

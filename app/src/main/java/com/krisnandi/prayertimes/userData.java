@@ -16,7 +16,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.Timestamp;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
@@ -26,6 +28,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Irnanto on 11-Aug-16.
@@ -35,13 +38,14 @@ public class userData {
 
     public DelegateBehaviour delegateBehaviour;
 
-    private final Context mContext;
 
     public double latitude;
     public double longitude;
 
     public String locationName;
-    public String currentDate;
+    public String todayDate;
+    public String tomorrowDate;
+
     public String time_fajr;
     public String time_sunrise;
     public String time_dhuhr;
@@ -49,12 +53,25 @@ public class userData {
     public String time_maghrib;
     public String time_ishaa;
 
+    private final Context mContext;
+    private boolean isUpdateData;
 
     public static userData getInstance(Context context) {
         if(ourInstance == null)
             ourInstance = new userData(context);
         return ourInstance;
     }
+
+    public boolean successUpdateData(){
+        if(false){
+            isUpdateData = true;
+            return false;
+        }
+        else {
+            return isUpdateData;
+        }
+    }
+
 
     private userData(Context context) {
         this.mContext = context;
@@ -68,11 +85,13 @@ public class userData {
         delegateBehaviour = behaviour;
     }
 
-    private String getCurrentDate(){
+    private String getTodayDate(){
         try {
             //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss");
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd MMMM yyyy");
-            String currentTimeStamp = dateFormat.format(new Date()); // Find todays date
+            Date today = new Date();
+
+            String currentTimeStamp = dateFormat.format(today); // Find todays date
 
             return currentTimeStamp;
         } catch (Exception e) {
@@ -82,19 +101,66 @@ public class userData {
         }
     }
 
-    private String getCurrentTimeStamp(){
+    private String getTomorrowDate(){
+        try {
+            //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd MMMM yyyy");
+
+            Date today = new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(today);
+            calendar.add(Calendar.DATE, 1);
+            Date tomorrow = calendar.getTime();
+
+            String currentTimeStamp = dateFormat.format(tomorrow); // Find todays date
+
+            return currentTimeStamp;
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return null;
+        }
+    }
+
+    private String getTodayTimeStamp(){
         try {
 
-            Long tsLong = System.currentTimeMillis()/1000;
-            String currentTimeStamp = tsLong.toString();
+            Date today = new Date();
+            Long tslong = today.getTime()/1000;
 
-            return currentTimeStamp;
+            String todayTimeStamp = tslong.toString();
+
+            return todayTimeStamp;
         } catch (Exception e) {
             e.printStackTrace();
 
             return null;
         }
     }
+
+    private String getTomorrowTimeStamp(){
+        try {
+
+            Date today = new Date();
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(today);
+            calendar.add(Calendar.DATE, 1);
+            Date tomorrow = calendar.getTime();
+
+            Long tslong = tomorrow.getTime()/1000;
+
+            String tomorrowTimestamp = tslong.toString();
+
+            return tomorrowTimestamp;
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return null;
+        }
+    }
+
+
 
     private String getLocationName(double latitude, double longitude)
     {
@@ -111,6 +177,12 @@ public class userData {
         return location;
     }
 
+    public String currentTime(){
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+       return String.valueOf(sdf.format(cal.getTime()));
+    }
+
     private String getCurrentLocalTIme(){
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.getDefault());
         Date currentLocalTime = calendar.getTime();
@@ -122,6 +194,90 @@ public class userData {
     private String getCurrentTimeZone(){
         return TimeZone.getDefault().getID();
     }
+
+
+    public boolean isDateTimeAfter(String str_date1, String str_date2){
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm:ss");
+        Date date1 = null;
+        try {
+            date1 = sdf.parse(str_date1);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date date2 = null;
+        try {
+            date2 = sdf.parse(str_date2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return date1.after(date2);
+    }
+
+    public boolean isDateTimeBefore(String str_date1, String str_date2){
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm:ss");
+        Date date1 = null;
+        try {
+            date1 = sdf.parse(str_date1);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date date2 = null;
+        try {
+            date2 = sdf.parse(str_date2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return date1.before(date2);
+    }
+
+    public String timeBetween(String str_date1, String str_date2){
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm:ss");
+        Date date1 = null;
+        try {
+            date1 = sdf.parse(str_date1);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date date2 = null;
+        try {
+            date2 = sdf.parse(str_date2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        long diff = date2.getTime() - date1.getTime();
+
+        String str_time = "<font color='red'> in ";
+        SimpleDateFormat tesFormat = new SimpleDateFormat("HH:mm");
+
+        int diffMinutes = (int) TimeUnit.MINUTES.convert(diff, TimeUnit.MILLISECONDS);
+        int hour = diffMinutes / 60;
+        int minute = diffMinutes % 60;
+
+
+        if(hour > 0) {
+            str_time = str_time + String.valueOf(hour);
+            if(hour > 1)
+                str_time = str_time + " Hours ";
+            else
+                str_time = str_time + " Hour ";
+        }
+
+        if(minute > 0) {
+            str_time = str_time + String.valueOf(minute);
+            if(minute > 1)
+                str_time = str_time + " Minutes";
+            else
+                str_time = str_time + " minute";
+        }
+
+        str_time = str_time + "</font>";
+
+        return str_time;
+    }
+
 
 
     private class DownloadFilesTask extends AsyncTask<Void, Void, Void> {
@@ -147,13 +303,6 @@ public class userData {
         protected Void doInBackground(Void... params) {
             //do your work here
 
-            //Set GPSTracker
-            //GPSTracker gps = new GPSTracker(mContext);
-
-            //get gps latitude and longitude
-            //double latitude = gps.getLatitude();
-            //double longitude = gps.getLongitude();
-
             //update location name
             locationName = getLocationName(latitude, longitude);
 
@@ -162,9 +311,10 @@ public class userData {
             Log.d("testing 3", locationName);
 
             //update current date
-            currentDate = getCurrentDate();
+            todayDate = getTodayDate();
+            tomorrowDate = getTomorrowDate();
 
-            String dataURL = "http://api.aladhan.com/timings/"+ getCurrentTimeStamp()
+            String dataURL = "http://api.aladhan.com/timings/"+ getTodayTimeStamp()
                     +"?latitude=" + String.valueOf(latitude)
                     + "&longitude=" + String.valueOf(longitude)
                     + "&timezonestring=" + getCurrentTimeZone()
@@ -185,15 +335,6 @@ public class userData {
                 URL url = new URL(dataURL);
                 urlConnection  = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
-
-                //urlConnection.setRequestProperty("latitude","51.508515");
-                //urlConnection.setRequestProperty("longitude","-0.1254872");
-                //urlConnection.setRequestProperty("timezonestring","Europe/London");
-                //urlConnection.setRequestProperty("method","2");
-
-                //urlConnection.setUseCaches(false);
-                //urlConnection.setDoInput(true);
-                //urlConnection.setDoOutput(true);
                 urlConnection .connect();
 
                 // Read the input stream into a String
@@ -232,7 +373,7 @@ public class userData {
                     try {
                         reader.close();
                     } catch (final IOException e) {
-                        Log.e("testingxxx", "Error closing stream", e);
+                        Log.e("testing", "Error closing stream", e);
                     }
                 }
             }
@@ -240,14 +381,7 @@ public class userData {
 
             try {
                 JSONObject jsonAll = new JSONObject(forecastJsonStr);
-
-                //Log.d("testing", jsonAll.getString("code"));
-                //Log.d("testing", jsonAll.getString("status"));
-                //Log.d("testing", jsonAll.getString("data"));
-
                 JSONObject jsonData = jsonAll.getJSONObject("data");
-                //Log.d("testing", jsonData.getString("timings"));
-                //Log.d("testing", jsonData.getString("date"));
 
                 JSONObject jsonTimings = jsonData.getJSONObject("timings");
                 time_fajr = jsonTimings.getString("Fajr");
@@ -257,23 +391,22 @@ public class userData {
                 time_maghrib = jsonTimings.getString("Maghrib");
                 time_ishaa = jsonTimings.getString("Isha");
 
+                /*
                 Log.d("testing", time_fajr);
                 Log.d("testing", time_sunrise);
                 Log.d("testing", time_dhuhr);
                 Log.d("testing", time_asr);
                 Log.d("testing", time_maghrib);
                 Log.d("testing", time_ishaa);
+                */
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            //delegateBehaviour.onDelegateVoid();
 
 
 
-            //Log.d("testing", forecastJsonStr);
-            //Log.d("testingzxzxzx", tes.toString());
             return null;
         }
 
