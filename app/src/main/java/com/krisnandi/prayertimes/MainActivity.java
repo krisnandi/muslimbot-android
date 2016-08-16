@@ -1,6 +1,10 @@
 package com.krisnandi.prayertimes;
 
 import android.animation.TimeAnimator;
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,6 +16,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -23,6 +29,8 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Calendar;
 
 
 public class MainActivity extends AppCompatActivity implements LocationListener, DelegateBehaviour {
@@ -65,7 +73,45 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
         //updateUserData();
         updateTheSchedule();
+
+        Intent notificationIntent = new Intent("android.media.action.DISPLAY_NOTIFICATION");
+        notificationIntent.addCategory("android.intent.category.DEFAULT");
+        notificationIntent.putExtra("tesinfo","prayer time");
+
+        PendingIntent broadcast = PendingIntent.getBroadcast(this, 100, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.SECOND, 5);
+        //calendar.set(Calendar.HOUR_OF_DAY, 15);
+        //calendar.set(Calendar.MINUTE, 17);
+        //calendar.set(Calendar.SECOND, 0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), broadcast);
+
+        Intent notificationIntent1 = new Intent("android.media.action.DISPLAY_NOTIFICATION");
+        notificationIntent1.addCategory("android.intent.category.DEFAULT");
+        notificationIntent1.putExtra("tesinfo","prayer time 1");
+        PendingIntent broadcast1 = PendingIntent.getBroadcast(this, 100, notificationIntent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.set(Calendar.HOUR_OF_DAY, 15);
+        calendar1.set(Calendar.MINUTE, 17);
+        calendar1.set(Calendar.SECOND, 0);
+        AlarmManager alarmManager1 = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager1.set(AlarmManager.RTC_WAKEUP, calendar1.getTimeInMillis(), broadcast1);
+
+        Intent notificationIntent2 = new Intent("android.media.action.DISPLAY_NOTIFICATION");
+        notificationIntent2.addCategory("android.intent.category.DEFAULT");
+        notificationIntent2.putExtra("tesinfo","prayer time 2");
+        PendingIntent broadcast2 = PendingIntent.getBroadcast(this, 100, notificationIntent2, PendingIntent.FLAG_UPDATE_CURRENT);
+        Calendar calendar2 = Calendar.getInstance();
+        calendar2.set(Calendar.HOUR_OF_DAY, 15);
+        calendar2.set(Calendar.MINUTE, 18);
+        calendar2.set(Calendar.SECOND, 0);
+        AlarmManager alarmManager2 = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager2.set(AlarmManager.RTC_WAKEUP, calendar2.getTimeInMillis(), broadcast2);
+
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
