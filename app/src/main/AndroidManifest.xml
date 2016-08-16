@@ -49,13 +49,7 @@
         <service android:name=".MyAlarmService"
                  android:enabled="true" />
 
-        <receiver android:name=".AlarmReceiver"
-                    android:enabled="true">
-            <intent-filter>
-                <action android:name="android.media.action.DISPLAY_NOTIFICATION" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </receiver>
+        <receiver android:name=".AlarmReceiver"/>
 
 
 

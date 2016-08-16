@@ -14,12 +14,21 @@ import java.util.Random;
 
 public class AlarmReceiver extends BroadcastReceiver{
 
+    public static String NOTIFICATION_ID = "notification-id";
+    public static String NOTIFICATION_TITLE = "notification-title";
+    public static String NOTIFICATION_INFO = "notification-info";
+    public static String NOTIFICATION_TICK = "notification-tick";
+
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
         Intent notificationIntent = new Intent(context, SplashScreen.class);
 
-        String info = intent.getStringExtra("tesinfo");
+        String id = intent.getStringExtra(NOTIFICATION_ID);
+        String title = intent.getStringExtra(NOTIFICATION_TITLE);
+        String info = intent.getStringExtra(NOTIFICATION_INFO);
+        String tick = intent.getStringExtra(NOTIFICATION_TICK);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(SplashScreen.class);
@@ -29,22 +38,24 @@ public class AlarmReceiver extends BroadcastReceiver{
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
 
-        Notification notification = builder.setContentTitle("Demo App Notification")
+        Notification notification = builder.setContentTitle(NOTIFICATION_TITLE)
                 .setContentText(info)
-                .setTicker("New Message Alert!")
+                .setTicker(tick)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentIntent(pendingIntent).build();
+                .setContentIntent(pendingIntent)
+                .setGroup(info)
+                .setAutoCancel(true)
+                .build();
 
         notification.defaults |= Notification.DEFAULT_SOUND;
         notification.defaults |= Notification.DEFAULT_VIBRATE;
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        Random random = new Random();
-        int m = random.nextInt(9999 - 1000) + 1000;
-
-        notificationManager.notify(m, notification);
-
+        //Random random = new Random();
+        //int m = random.nextInt(9999 - 1000) + 1000;
+        //notificationManager.notify(m, notification);
+        notificationManager.notify(0, notification);
 
     }
 }
