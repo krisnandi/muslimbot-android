@@ -1,10 +1,5 @@
-package com.krisnandi.prayertimes;
+package com.reswift.prayertimes;
 
-import android.animation.TimeAnimator;
-import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -16,9 +11,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -30,8 +22,6 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.Calendar;
 
 
 public class MainActivity extends AppCompatActivity implements LocationListener, DelegateBehaviour {
@@ -54,22 +44,22 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         editor = sharedPref.edit();
 
         CheckBox fajrcheck = (CheckBox) findViewById(R.id.fajr_check);
-        fajrcheck.setChecked(sharedPref.getBoolean(getString(R.string.id_fajr), false));
+        fajrcheck.setChecked(sharedPref.getBoolean(getString(R.string.id_fajr), true));
 
         CheckBox sunrisecheck = (CheckBox) findViewById(R.id.sunrise_check);
-        sunrisecheck.setChecked(sharedPref.getBoolean(getString(R.string.id_sunrise), false));
+        sunrisecheck.setChecked(sharedPref.getBoolean(getString(R.string.id_sunrise), true));
 
         CheckBox dhuhrcheck = (CheckBox) findViewById(R.id.dhuhr_check);
-        dhuhrcheck.setChecked(sharedPref.getBoolean(getString(R.string.id_dhuhr), false));
+        dhuhrcheck.setChecked(sharedPref.getBoolean(getString(R.string.id_dhuhr), true));
 
         CheckBox asrcheck = (CheckBox) findViewById(R.id.asr_check);
-        asrcheck.setChecked(sharedPref.getBoolean(getString(R.string.id_asr), false));
+        asrcheck.setChecked(sharedPref.getBoolean(getString(R.string.id_asr), true));
 
         CheckBox maghribcheck = (CheckBox) findViewById(R.id.maghrib_check);
-        maghribcheck.setChecked(sharedPref.getBoolean(getString(R.string.id_maghrib), false));
+        maghribcheck.setChecked(sharedPref.getBoolean(getString(R.string.id_maghrib), true));
 
         CheckBox ishaacheck = (CheckBox) findViewById(R.id.isha_check);
-        ishaacheck.setChecked(sharedPref.getBoolean(getString(R.string.id_ishaa), false));
+        ishaacheck.setChecked(sharedPref.getBoolean(getString(R.string.id_ishaa), true));
 
         //updateUserData();
         updateTheSchedule();
@@ -168,6 +158,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             alertNoGPS();
             return;
         }
+
+        Toast.makeText(this, "Refresh Prayer Times", Toast.LENGTH_LONG).show();
 
         double latitude = gps.getLatitude();
         double longitude = gps.getLongitude();
@@ -364,6 +356,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             String text = fajrInfo.getText() + userData.getInstance(this).timeBetween(currentTime, fajrTime);
             fajrInfo.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
         }
+
+        Toast.makeText(this, "Prayer Times Updated", Toast.LENGTH_LONG).show();
 
     }
 

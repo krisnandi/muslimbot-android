@@ -1,4 +1,4 @@
-package com.krisnandi.prayertimes;
+package com.reswift.prayertimes;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

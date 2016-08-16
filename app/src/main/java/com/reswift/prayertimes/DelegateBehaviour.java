@@ -1,4 +1,4 @@
-package com.krisnandi.prayertimes;
+package com.reswift.prayertimes;
 
 /**
  * Created by Irnanto on 14-Aug-16.

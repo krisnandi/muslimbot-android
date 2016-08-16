@@ -1,4 +1,4 @@
-package com.krisnandi.prayertimes;
+package com.reswift.prayertimes;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -12,7 +12,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -24,16 +23,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.security.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
@@ -314,12 +309,12 @@ public class userData {
         Activity tempActivity = (Activity) mContext;
         SharedPreferences sharedPref = tempActivity.getSharedPreferences("alldata", Context.MODE_PRIVATE);;
 
-        Boolean fajrNotif = sharedPref.getBoolean(mContext.getString(R.string.id_fajr), false);
-        Boolean sunriseNotif = sharedPref.getBoolean(mContext.getString(R.string.id_sunrise), false);
-        Boolean dhuhrNotif = sharedPref.getBoolean(mContext.getString(R.string.id_dhuhr), false);
-        Boolean asrNotif = sharedPref.getBoolean(mContext.getString(R.string.id_asr), false);
-        Boolean maghribNotif = sharedPref.getBoolean(mContext.getString(R.string.id_maghrib), false);
-        Boolean ishaNotif = sharedPref.getBoolean(mContext.getString(R.string.id_ishaa), false);
+        Boolean fajrNotif = sharedPref.getBoolean(mContext.getString(R.string.id_fajr), true);
+        Boolean sunriseNotif = sharedPref.getBoolean(mContext.getString(R.string.id_sunrise), true);
+        Boolean dhuhrNotif = sharedPref.getBoolean(mContext.getString(R.string.id_dhuhr), true);
+        Boolean asrNotif = sharedPref.getBoolean(mContext.getString(R.string.id_asr), true);
+        Boolean maghribNotif = sharedPref.getBoolean(mContext.getString(R.string.id_maghrib), true);
+        Boolean ishaNotif = sharedPref.getBoolean(mContext.getString(R.string.id_ishaa), true);
 
         String currentTime = todayDate + " " + currentTime();
         Calendar currentCalendar = StringToCalendar(currentTime);

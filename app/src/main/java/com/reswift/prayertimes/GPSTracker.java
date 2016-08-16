@@ -1,4 +1,4 @@
-package com.krisnandi.prayertimes;
+package com.reswift.prayertimes;
 
 import android.Manifest;
 import android.app.AlertDialog;

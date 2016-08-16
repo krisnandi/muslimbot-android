@@ -1,4 +1,4 @@
-package com.krisnandi.prayertimes;
+package com.reswift.prayertimes;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

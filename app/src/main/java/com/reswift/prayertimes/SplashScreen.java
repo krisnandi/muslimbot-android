@@ -1,4 +1,4 @@
-package com.krisnandi.prayertimes;
+package com.reswift.prayertimes;
 
 import android.app.Activity;
 import android.content.DialogInterface;
