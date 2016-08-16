@@ -38,7 +38,7 @@ public class AlarmReceiver extends BroadcastReceiver{
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
 
-        Notification notification = builder.setContentTitle(NOTIFICATION_TITLE)
+        Notification notification = builder.setContentTitle(title)
                 .setContentText(info)
                 .setTicker(tick)
                 .setSmallIcon(R.mipmap.ic_launcher)

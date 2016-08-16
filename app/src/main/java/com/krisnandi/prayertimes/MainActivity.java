@@ -50,9 +50,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        sharedPref = getPreferences(Context.MODE_PRIVATE);
+        sharedPref = getSharedPreferences("alldata", Context.MODE_PRIVATE); //getPreferences(Context.MODE_PRIVATE);
         editor = sharedPref.edit();
-
 
         CheckBox fajrcheck = (CheckBox) findViewById(R.id.fajr_check);
         fajrcheck.setChecked(sharedPref.getBoolean(getString(R.string.id_fajr), false));
@@ -74,41 +73,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
         //updateUserData();
         updateTheSchedule();
-
-        Calendar calendar1 = Calendar.getInstance();
-        //calendar1.set(Calendar.HOUR_OF_DAY, 16);
-        //calendar1.set(Calendar.MINUTE, 29);
-        //calendar1.set(Calendar.SECOND, 0);
-        calendar1.add(Calendar.SECOND, 5);
-        addNotification(calendar1, "tes 1");
-
-        Calendar calendar2 = Calendar.getInstance();
-        //calendar2.set(Calendar.HOUR_OF_DAY, 16);
-        //calendar2.set(Calendar.MINUTE, 30);
-        //calendar2.set(Calendar.SECOND, 0);
-        calendar2.add(Calendar.SECOND, 10);
-        addNotification(calendar2, "tes 2");
-
-        Calendar calendar3 = Calendar.getInstance();
-        //calendar3.set(Calendar.HOUR_OF_DAY, 16);
-        //calendar3.set(Calendar.MINUTE, 31);
-        //calendar3.set(Calendar.SECOND, 0);
-        calendar3.add(Calendar.SECOND, 15);
-        addNotification(calendar3, "tes 3");
     }
 
-    public void addNotification (Calendar calendar, String Info){
-        //Intent notificationIntent = new Intent("android.media.action.DISPLAY_NOTIFICATION");
-        //notificationIntent.addCategory("android.intent.category.DEFAULT");
 
-        Intent notificationIntent = new Intent(this, AlarmReceiver.class);
-        notificationIntent.setData(Uri.parse("timer:" + Info));
-        notificationIntent.putExtra("notifinfo", Info);
-
-        PendingIntent broadcast = PendingIntent.getBroadcast(this, 100, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), broadcast);
-    }
 
 
     @Override
@@ -136,9 +103,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         else if (id == R.id.rate_app) {
             launchMarket();
         }
-        else if (id == R.id.action_settings) {
-
-        }
+        //else if (id == R.id.action_settings) {}
 
         return super.onOptionsItemSelected(item);
     }
@@ -487,6 +452,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         }
 
         editor.commit();
+        userData.getInstance(this).SchedulingALLNotification();
+
     }
 
 }
