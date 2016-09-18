@@ -1,16 +1,22 @@
 package com.reswift.prayertimes;
 
+
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.widget.Toast;
+
 
 /**
  * Created by Irnanto on 14-Aug-16.
  */
 public class SplashScreen extends Activity implements DelegateBehaviour {
+
+    String TAG = "Testing";
 
     private Thread timerThread;
 
@@ -19,8 +25,6 @@ public class SplashScreen extends Activity implements DelegateBehaviour {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
-
-        updateUserData();
 
         timerThread = new Thread(){
             public void run(){
@@ -36,9 +40,9 @@ public class SplashScreen extends Activity implements DelegateBehaviour {
         };
 
 
-
-        //timerThread.start();
+        updateUserData();
     }
+
 
     @Override
     protected void onPause() {
@@ -47,10 +51,11 @@ public class SplashScreen extends Activity implements DelegateBehaviour {
         finish();
     }
 
+
     private void updateUserData(){
 
         if(!userData.getInstance(this).isNetworkAvailable()){
-            Log.d("testing", "no internet");
+            Log.d(TAG, "no internet");
             alertNoInternet();
             return;
         }
@@ -59,7 +64,7 @@ public class SplashScreen extends Activity implements DelegateBehaviour {
 
         if(!gps.isGPSEnabled){
 
-            Log.d("testing", "no gps");
+            Log.d(TAG, "no gps");
             alertNoGPS();
             return;
         }
@@ -78,7 +83,7 @@ public class SplashScreen extends Activity implements DelegateBehaviour {
 
     @Override
     public void onDelegateVoid() {
-        Log.d("testing", "Go to Main Menu");
+        Log.d(TAG, "Go to Main Menu");
         timerThread.start();
     }
 
