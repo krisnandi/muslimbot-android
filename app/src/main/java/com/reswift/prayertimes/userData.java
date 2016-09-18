@@ -46,9 +46,7 @@ public class userData {
     public static String ID_maghrib = "id-maghrib";
     public static String ID_isha = "id-isha";
 
-
     public DelegateBehaviour delegateBehaviour;
-
 
     public double latitude;
     public double longitude;

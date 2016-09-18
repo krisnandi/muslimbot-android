@@ -2,17 +2,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.reswift.prayertimes">
 
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.location" android:required="true" />
-    <uses-feature android:name="android.hardware.location.gps" android:required="false" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature
+        android:name="android.hardware.location"
+        android:required="true"/>
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false"/>
 
     <application
         android:allowBackup="true"
@@ -20,39 +24,53 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
-            android:name="com.reswift.prayertimes.SplashScreen"
-            android:screenOrientation="portrait"
-            android:label="@string/app_name" >
+            android:name=".LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
         <activity
-            android:name="com.reswift.prayertimes.MainActivity"
+            android:name=".SplashScreen"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <!-- category android:name="android.intent.category.LAUNCHER"/ -->
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-                <action android:name="android.intent.action.ACTION_TIME_TICK" />
+                <action android:name="android.intent.action.ACTION_TIME_TICK"/>
 
-                <!--category android:name="android.intent.category.LAUNCHER"/-->
+                <!-- category android:name="android.intent.category.LAUNCHER"/ -->
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
-        <service android:name="com.reswift.prayertimes.MyAlarmService"
-                 android:enabled="true" />
+        <service
+            android:name=".MyAlarmService"
+            android:enabled="true"/>
 
-        <receiver android:name="com.reswift.prayertimes.AlarmReceiver"/>
+        <receiver android:name=".AlarmReceiver"/>
 
-
-
+        <activity
+            android:name=".RegisterActivity"
+            android:label="Register">
+        </activity>
+        <activity
+            android:name=".ForgetPasswordActivity"
+            android:label="Forget Password">
+        </activity>
     </application>
 
 </manifest>

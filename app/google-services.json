@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "209612663465",
+    "firebase_url": "https://muslimbot-94c60.firebaseio.com",
+    "project_id": "muslimbot-94c60",
+    "storage_bucket": "muslimbot-94c60.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:209612663465:android:0718c0ae3fd08555",
+        "android_client_info": {
+          "package_name": "com.reswift.prayertimes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "209612663465-b49ton10lagtfvakpcshabklc9ae1f0d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.reswift.prayertimes",
+            "certificate_hash": "7FE713C2FEDE85671184A0E10ACAB044F2C28A5B"
+          }
+        },
+        {
+          "client_id": "209612663465-2oejt64c0pu3l0o1bi0khuhn9d55qifn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkJf-7F1HcBCwNEa1bQoyB7v_Ll7vMf60"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "209612663465-2oejt64c0pu3l0o1bi0khuhn9d55qifn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
