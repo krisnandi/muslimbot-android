@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 
@@ -41,6 +43,14 @@ public class SplashScreen extends Activity implements DelegateBehaviour {
 
 
         updateUserData();
+
+        ImageView image = (ImageView) findViewById(R.id.splash_image);
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                timerThread.start();
+            }
+        });
     }
 
 
