@@ -14,6 +14,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.reswift.model.PrayerTimesDay;
+import com.reswift.model.Timings;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,6 +35,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 
 /**
  * Created by Irnanto on 11-Aug-16.
@@ -55,15 +65,9 @@ public class userData {
     public String todayDate;
     public String tomorrowDate;
 
-    public String time_fajr;
-    public String time_sunrise;
-    public String time_dhuhr;
-    public String time_asr;
-    public String time_maghrib;
-    public String time_ishaa;
-
     private final Context mContext;
-    private boolean isUpdateData;
+
+    public PrayerTimesDay prayerTimesDay;
 
     public static userData getInstance(Context context) {
         if(ourInstance == null)
@@ -71,23 +75,53 @@ public class userData {
         return ourInstance;
     }
 
-    public boolean successUpdateData(){
-        if(false){
-            isUpdateData = true;
-            return false;
-        }
-        else {
-            return isUpdateData;
-        }
-    }
-
-
     private userData(Context context) {
         this.mContext = context;
     }
 
-    public void updateData(){
-        new DownloadFilesTask().execute();
+    String TAG = "testing";
+
+    public void updateData() {
+        //new DownloadFilesTask().execute();
+
+        String BASE_URL = "http://api.aladhan.com/";
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+
+        PrayerTimesDayService service = retrofit.create(PrayerTimesDayService.class);
+
+        Call<PrayerTimesDay> call = service.getContent(getTodayTimeStamp(), String.valueOf(latitude), String.valueOf(longitude), getCurrentTimeZone(), "5");
+
+        call.enqueue(new Callback<PrayerTimesDay>() {
+            @Override
+            public void onResponse(Call<PrayerTimesDay> call, Response<PrayerTimesDay> response) {
+                try {
+                    prayerTimesDay = response.body();
+
+                    Log.d(TAG, "fajr 1 :  " + prayerTimesDay.getData().getTimings().getFajr());
+
+                } catch (Exception e) {
+                    Log.d(TAG, "There is an error");
+                    e.printStackTrace();
+                }
+                finally {
+                    Log.d(TAG, "fajr 1 :  " + prayerTimesDay.getData().getTimings().getFajr());
+                    SchedulingALLNotification();
+                    //delegateBehaviour.onDelegateVoid();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PrayerTimesDay> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage().toString());
+            }
+
+
+        });
+
     }
 
     public void setBehaviour(DelegateBehaviour behaviour){
@@ -302,93 +336,94 @@ public class userData {
     }
 
     public void  SchedulingALLNotification(){
-        CancelAllNotification();
-
-        Activity tempActivity = (Activity) mContext;
-        SharedPreferences sharedPref = tempActivity.getSharedPreferences("alldata", Context.MODE_PRIVATE);;
-
-        Boolean fajrNotif = sharedPref.getBoolean(mContext.getString(R.string.id_fajr), true);
-        Boolean sunriseNotif = sharedPref.getBoolean(mContext.getString(R.string.id_sunrise), true);
-        Boolean dhuhrNotif = sharedPref.getBoolean(mContext.getString(R.string.id_dhuhr), true);
-        Boolean asrNotif = sharedPref.getBoolean(mContext.getString(R.string.id_asr), true);
-        Boolean maghribNotif = sharedPref.getBoolean(mContext.getString(R.string.id_maghrib), true);
-        Boolean ishaNotif = sharedPref.getBoolean(mContext.getString(R.string.id_ishaa), true);
-
-        String currentTime = todayDate + " " + currentTime();
-        Calendar currentCalendar = StringToCalendar(currentTime);
-
-
-        if(fajrNotif) {
-            String fajrTime = combinePrayerDateTime(todayDate, time_fajr);
-            Calendar fajrCalendar = StringToCalendar(fajrTime);
-            if (currentCalendar.after(fajrCalendar)) {
-                fajrTime = combinePrayerDateTime(tomorrowDate, time_fajr);
-                fajrCalendar = StringToCalendar(fajrTime);
-            }
-            String fajrTitle = "Fajr Prayer";
-            String fajrInfo = "It's time for Fajr prayer";
-            addNotification(fajrCalendar, ID_fajr, fajrTitle, fajrInfo, fajrInfo);
-        }
-
-        if(sunriseNotif) {
-            String sunriseTime = combinePrayerDateTime(todayDate, time_sunrise);
-            Calendar sunriseCalendar = StringToCalendar(sunriseTime);
-            if (currentCalendar.after(sunriseCalendar)) {
-                sunriseTime = combinePrayerDateTime(tomorrowDate, time_sunrise);
-                sunriseCalendar = StringToCalendar(sunriseTime);
-            }
-            String sunriseTitle = "Sunrise";
-            String sunriseInfo = "It's past Sunrise time";
-            addNotification(sunriseCalendar, ID_sunrise, sunriseTitle, sunriseInfo, sunriseInfo);
-        }
-
-        if(dhuhrNotif) {
-            String dhuhrTime = combinePrayerDateTime(todayDate, time_dhuhr);
-            Calendar dhuhrCalendar = StringToCalendar(dhuhrTime);
-            if (currentCalendar.after(dhuhrCalendar)) {
-                dhuhrTime = combinePrayerDateTime(tomorrowDate, time_dhuhr);
-                dhuhrCalendar = StringToCalendar(dhuhrTime);
-            }
-            String dhuhrTitle = "Dhuhr Prayer";
-            String dhuhrInfo = "It's time for Dhuhr prayer";
-            addNotification(dhuhrCalendar, ID_dhuhr, dhuhrTitle, dhuhrInfo, dhuhrInfo);
-        }
-
-        if(asrNotif) {
-            String asrTime = combinePrayerDateTime(todayDate, time_asr);
-            Calendar asrCalendar = StringToCalendar(asrTime);
-            if (currentCalendar.after(asrCalendar)) {
-                asrTime = combinePrayerDateTime(tomorrowDate, time_asr);
-                asrCalendar = StringToCalendar(asrTime);
-            }
-            String asrTitle = "Asr Prayer";
-            String asrInfo = "It's time for Asr prayer";
-            addNotification(asrCalendar, ID_asr, asrTitle, asrInfo, asrInfo);
-        }
-
-        if(maghribNotif) {
-            String maghribTime = combinePrayerDateTime(todayDate, time_maghrib);
-            Calendar maghribCalendar = StringToCalendar(maghribTime);
-            if (currentCalendar.after(maghribCalendar)) {
-                maghribTime = combinePrayerDateTime(tomorrowDate, time_maghrib);
-                maghribCalendar = StringToCalendar(maghribTime);
-            }
-            String maghribTitle = "Maghrib Prayer";
-            String maghribInfo = "It's time for Maghrib prayer";
-            addNotification(maghribCalendar, ID_maghrib, maghribTitle, maghribInfo, maghribInfo);
-        }
-
-        if(ishaNotif) {
-            String ishaaTime = combinePrayerDateTime(todayDate, time_ishaa);
-            Calendar ishaaCalendar = StringToCalendar(ishaaTime);
-            if (currentCalendar.after(ishaaCalendar)) {
-                ishaaTime = combinePrayerDateTime(tomorrowDate, time_ishaa);
-                ishaaCalendar = StringToCalendar(ishaaTime);
-            }
-            String ishaTitle = "Ishaa Prayer";
-            String ishaInfo = "It's time for Ishaa prayer";
-            addNotification(ishaaCalendar, ID_isha, ishaTitle, ishaInfo, ishaInfo);
-        }
+//        CancelAllNotification();
+//
+//
+//        Activity tempActivity = (Activity) mContext;
+//        SharedPreferences sharedPref = tempActivity.getSharedPreferences("alldata", Context.MODE_PRIVATE);;
+//
+//        Boolean fajrNotif = sharedPref.getBoolean(mContext.getString(R.string.id_fajr), true);
+//        Boolean sunriseNotif = sharedPref.getBoolean(mContext.getString(R.string.id_sunrise), true);
+//        Boolean dhuhrNotif = sharedPref.getBoolean(mContext.getString(R.string.id_dhuhr), true);
+//        Boolean asrNotif = sharedPref.getBoolean(mContext.getString(R.string.id_asr), true);
+//        Boolean maghribNotif = sharedPref.getBoolean(mContext.getString(R.string.id_maghrib), true);
+//        Boolean ishaNotif = sharedPref.getBoolean(mContext.getString(R.string.id_ishaa), true);
+//
+//        String currentTime = todayDate + " " + currentTime();
+//        Calendar currentCalendar = StringToCalendar(currentTime);
+//
+//
+//        if(fajrNotif) {
+//            String fajrTime = combinePrayerDateTime(todayDate, time_fajr);
+//            Calendar fajrCalendar = StringToCalendar(fajrTime);
+//            if (currentCalendar.after(fajrCalendar)) {
+//                fajrTime = combinePrayerDateTime(tomorrowDate, time_fajr);
+//                fajrCalendar = StringToCalendar(fajrTime);
+//            }
+//            String fajrTitle = "Fajr Prayer";
+//            String fajrInfo = "It's time for Fajr prayer";
+//            addNotification(fajrCalendar, ID_fajr, fajrTitle, fajrInfo, fajrInfo);
+//        }
+//
+//        if(sunriseNotif) {
+//            String sunriseTime = combinePrayerDateTime(todayDate, time_sunrise);
+//            Calendar sunriseCalendar = StringToCalendar(sunriseTime);
+//            if (currentCalendar.after(sunriseCalendar)) {
+//                sunriseTime = combinePrayerDateTime(tomorrowDate, time_sunrise);
+//                sunriseCalendar = StringToCalendar(sunriseTime);
+//            }
+//            String sunriseTitle = "Sunrise";
+//            String sunriseInfo = "It's past Sunrise time";
+//            addNotification(sunriseCalendar, ID_sunrise, sunriseTitle, sunriseInfo, sunriseInfo);
+//        }
+//
+//        if(dhuhrNotif) {
+//            String dhuhrTime = combinePrayerDateTime(todayDate, time_dhuhr);
+//            Calendar dhuhrCalendar = StringToCalendar(dhuhrTime);
+//            if (currentCalendar.after(dhuhrCalendar)) {
+//                dhuhrTime = combinePrayerDateTime(tomorrowDate, time_dhuhr);
+//                dhuhrCalendar = StringToCalendar(dhuhrTime);
+//            }
+//            String dhuhrTitle = "Dhuhr Prayer";
+//            String dhuhrInfo = "It's time for Dhuhr prayer";
+//            addNotification(dhuhrCalendar, ID_dhuhr, dhuhrTitle, dhuhrInfo, dhuhrInfo);
+//        }
+//
+//        if(asrNotif) {
+//            String asrTime = combinePrayerDateTime(todayDate, time_asr);
+//            Calendar asrCalendar = StringToCalendar(asrTime);
+//            if (currentCalendar.after(asrCalendar)) {
+//                asrTime = combinePrayerDateTime(tomorrowDate, time_asr);
+//                asrCalendar = StringToCalendar(asrTime);
+//            }
+//            String asrTitle = "Asr Prayer";
+//            String asrInfo = "It's time for Asr prayer";
+//            addNotification(asrCalendar, ID_asr, asrTitle, asrInfo, asrInfo);
+//        }
+//
+//        if(maghribNotif) {
+//            String maghribTime = combinePrayerDateTime(todayDate, time_maghrib);
+//            Calendar maghribCalendar = StringToCalendar(maghribTime);
+//            if (currentCalendar.after(maghribCalendar)) {
+//                maghribTime = combinePrayerDateTime(tomorrowDate, time_maghrib);
+//                maghribCalendar = StringToCalendar(maghribTime);
+//            }
+//            String maghribTitle = "Maghrib Prayer";
+//            String maghribInfo = "It's time for Maghrib prayer";
+//            addNotification(maghribCalendar, ID_maghrib, maghribTitle, maghribInfo, maghribInfo);
+//        }
+//
+//        if(ishaNotif) {
+//            String ishaaTime = combinePrayerDateTime(todayDate, time_ishaa);
+//            Calendar ishaaCalendar = StringToCalendar(ishaaTime);
+//            if (currentCalendar.after(ishaaCalendar)) {
+//                ishaaTime = combinePrayerDateTime(tomorrowDate, time_ishaa);
+//                ishaaCalendar = StringToCalendar(ishaaTime);
+//            }
+//            String ishaTitle = "Ishaa Prayer";
+//            String ishaInfo = "It's time for Ishaa prayer";
+//            addNotification(ishaaCalendar, ID_isha, ishaTitle, ishaInfo, ishaInfo);
+//        }
 
     }
 
@@ -417,8 +452,6 @@ public class userData {
     }
 
     public void addNotification (Calendar calendar, String Id, String Title, String Info, String Tick){
-        //Intent notificationIntent = new Intent("android.media.action.DISPLAY_NOTIFICATION");
-        //notificationIntent.addCategory("android.intent.category.DEFAULT");
 
         Intent notificationIntent = new Intent(mContext, AlarmReceiver.class);
         notificationIntent.setData(Uri.parse("timer:" + Id));
@@ -443,152 +476,6 @@ public class userData {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    private class DownloadFilesTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            /*
-             *    do things before doInBackground() code runs
-             *    such as preparing and showing a Dialog or ProgressBar
-            */
-            Log.d("testing", "wew preexecute");
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            /*
-             *    updating data
-             *    such a Dialog or ProgressBar
-            */
-            Log.d("testing", "wew update");
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            //do your work here
-
-            //update location name
-            locationName = getLocationName(latitude, longitude);
-
-            //Log.d("testing 1", String.valueOf(latitude));
-            //Log.d("testing 2", String.valueOf(longitude));
-            //Log.d("testing 3", locationName);
-
-            //update current date
-            todayDate = getTodayDate();
-            tomorrowDate = getTomorrowDate();
-
-            String dataURL = "http://api.aladhan.com/timings/"+ getTodayTimeStamp()
-                    +"?latitude=" + String.valueOf(latitude)
-                    + "&longitude=" + String.valueOf(longitude)
-                    + "&timezonestring=" + getCurrentTimeZone()
-                    +"&method=5";
-
-            //Log.d("testing", dataURL);
-
-            //String dataURL = "http://api.aladhan.com/timings/1398332113?latitude=51.508515&longitude=-0.1254872&timezonestring=Europe/London&method=2";
-            //String dataURL = "http://api.aladhan.com/timings/1398332113";
-
-            HttpURLConnection urlConnection  = null;
-            BufferedReader reader = null;
-
-            // Will contain the raw JSON response as a string.
-            String forecastJsonStr = null;
-            try {
-                // Create connection
-                URL url = new URL(dataURL);
-                urlConnection  = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection .connect();
-
-                // Read the input stream into a String
-                InputStream inputStream = urlConnection.getInputStream();
-                StringBuffer buffer = new StringBuffer();
-                if (inputStream == null) {
-                    // Nothing to do.
-                    return null;
-                }
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                    // But it does make debugging a *lot* easier if you print out the completed
-                    // buffer for debugging.
-                    buffer.append(line + "\n");
-                }
-
-                if (buffer.length() == 0) {
-                    // Stream was empty.  No point in parsing.
-                    return null;
-                }
-                forecastJsonStr = buffer.toString();
-                //Log.d("testing 2", forecastJsonStr);
-            }
-            catch (IOException e) {
-                Log.e("testing", "Error ", e);
-                //Handles input and output errors
-            }
-            finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-                if (reader != null) {
-                    try {
-                        reader.close();
-                    } catch (final IOException e) {
-                        Log.e("testing", "Error closing stream", e);
-                    }
-                }
-            }
-
-
-            try {
-                JSONObject jsonAll = new JSONObject(forecastJsonStr);
-                JSONObject jsonData = jsonAll.getJSONObject("data");
-
-                JSONObject jsonTimings = jsonData.getJSONObject("timings");
-                time_fajr = jsonTimings.getString("Fajr");
-                time_sunrise = jsonTimings.getString("Sunrise");
-                time_dhuhr = jsonTimings.getString("Dhuhr");
-                time_asr = jsonTimings.getString("Asr");
-                time_maghrib = jsonTimings.getString("Maghrib");
-                time_ishaa = jsonTimings.getString("Isha");
-
-                /*
-                Log.d("testing", time_fajr);
-                Log.d("testing", time_sunrise);
-                Log.d("testing", time_dhuhr);
-                Log.d("testing", time_asr);
-                Log.d("testing", time_maghrib);
-                Log.d("testing", time_ishaa);
-                */
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            /*
-             *    do something with data here
-             *    display it or send to mainactivity
-             *    close any dialogs/ProgressBars/etc...
-            */
-
-            //Log.d("testing", "wew on post execute");
-
-            SchedulingALLNotification();
-            delegateBehaviour.onDelegateVoid();
-
-        }
-
-
-    }
 
 
 
