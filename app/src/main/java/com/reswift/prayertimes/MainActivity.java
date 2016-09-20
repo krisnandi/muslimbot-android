@@ -23,6 +23,9 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class MainActivity extends AppCompatActivity implements LocationListener, DelegateBehaviour {
 
@@ -31,17 +34,25 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     SharedPreferences sharedPref;// = getPreferences(Context.MODE_PRIVATE);
     SharedPreferences.Editor editor;// = sharedPref.edit();
 
+    String TAG = "testing";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+        ButterKnife.bind(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         sharedPref = getSharedPreferences("alldata", Context.MODE_PRIVATE); //getPreferences(Context.MODE_PRIVATE);
         editor = sharedPref.edit();
+
+        for (PrayerTimeCard card: userData.getInstance(this).prayerTimeCards) {
+            Log.d(TAG, "onCreate: " + card.solat + " - " + card.time);
+        }
 
         CheckBox fajrcheck = (CheckBox) findViewById(R.id.fajr_check);
         fajrcheck.setChecked(sharedPref.getBoolean(getString(R.string.id_fajr), true));
@@ -61,10 +72,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         CheckBox ishaacheck = (CheckBox) findViewById(R.id.isha_check);
         ishaacheck.setChecked(sharedPref.getBoolean(getString(R.string.id_ishaa), true));
 
-        //updateUserData();
-        //updateTheSchedule();
-
-        Log.d("testing", userData.getInstance(this).prayerTimesDay.getData().getTimings().getDhuhr());
+        updateUserData();
+        updateTheSchedule();
     }
 
 
@@ -193,15 +202,17 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     private void updateTheSchedule()
     {
 
-//        TextView textLocation =  (TextView) findViewById(R.id.textLocation);
-//        textLocation.setText(userData.getInstance(this).locationName);
-//
-//        TextView textCalender =  (TextView) findViewById(R.id.textCalender);
-//        textCalender.setText(userData.getInstance(this).todayDate);
-//
-//        //set current time for comparasion
-//        String currentTime = userData.getInstance(this).todayDate + " " + userData.getInstance(this).currentTime();
-//
+        TextView textLocation =  (TextView) findViewById(R.id.textLocation);
+        textLocation.setText(userData.getInstance(this).locationName);
+        Log.d(TAG, "locationName: " + userData.getInstance(this).locationName);
+
+        TextView textCalender =  (TextView) findViewById(R.id.textCalender);
+        textCalender.setText(userData.getInstance(this).todayDate);
+        Log.d(TAG, "todayDate: " + userData.getInstance(this).todayDate);
+
+        //set current time for comparasion
+        String currentTime = userData.getInstance(this).todayDate + " " + userData.getInstance(this).currentTime();
+
 //        //set fajr
 //        TextView fajr_time =  (TextView) findViewById(R.id.fajr_time);
 //        fajr_time.setText(userData.getInstance(this).time_fajr);
@@ -359,7 +370,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 //            fajrInfo.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
 //        }
 //
-//        Toast.makeText(this, "Prayer Times Updated", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Prayer Times Updated", Toast.LENGTH_LONG).show();
 
     }
 

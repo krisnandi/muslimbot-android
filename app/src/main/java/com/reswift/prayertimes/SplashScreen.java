@@ -35,7 +35,9 @@ public class SplashScreen extends Activity implements DelegateBehaviour {
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }finally{
-                    Intent intent = new Intent(SplashScreen.this,MainActivity.class);
+//                    Intent intent = new Intent(SplashScreen.this,MainActivity.class);
+                    Intent intent = new Intent(SplashScreen.this, PrayerTimesActivity.class);
+
                     startActivity(intent);
                 }
             }
@@ -43,14 +45,6 @@ public class SplashScreen extends Activity implements DelegateBehaviour {
 
 
         updateUserData();
-
-        ImageView image = (ImageView) findViewById(R.id.splash_image);
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                timerThread.start();
-            }
-        });
     }
 
 
