@@ -43,14 +43,6 @@ public class SplashScreen extends Activity implements DelegateBehaviour {
 
 
         updateUserData();
-
-        ImageView image = (ImageView) findViewById(R.id.splash_image);
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                timerThread.start();
-            }
-        });
     }
 
 

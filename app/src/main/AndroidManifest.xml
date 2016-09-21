@@ -71,6 +71,8 @@
             android:name=".ForgetPasswordActivity"
             android:label="Forget Password">
         </activity>
+        <activity android:name=".PrayerTimesActivity">
+        </activity>
     </application>
 
 </manifest>
