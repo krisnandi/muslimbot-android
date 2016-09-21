@@ -35,8 +35,8 @@ public class SplashScreen extends Activity implements DelegateBehaviour {
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }finally{
-//                    Intent intent = new Intent(SplashScreen.this,MainActivity.class);
-                    Intent intent = new Intent(SplashScreen.this, PrayerTimesActivity.class);
+                    Intent intent = new Intent(SplashScreen.this,MainActivity.class);
+                    //Intent intent = new Intent(SplashScreen.this, PrayerTimesActivity.class);
 
                     startActivity(intent);
                 }

@@ -50,6 +50,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class userData {
     private static userData ourInstance;// = new userData();
 
+    String TAG = "testing";
+
     public static String ID_fajr = "id-fajr";
     public static String ID_sunrise = "id-sunrise";
     public static String ID_dhuhr = "id-dhuhr";
@@ -72,6 +74,13 @@ public class userData {
 
     public List<PrayerTimeCard> prayerTimeCards;
 
+    SharedPreferences sharedPref;
+    SharedPreferences.Editor editor;
+
+    public static userData getInstance() {
+        return ourInstance;
+    }
+
     public static userData getInstance(Context context) {
         if(ourInstance == null)
             ourInstance = new userData(context);
@@ -80,9 +89,11 @@ public class userData {
 
     private userData(Context context) {
         this.mContext = context;
+        sharedPref = mContext.getSharedPreferences("alldata", Context.MODE_PRIVATE);
+        editor = sharedPref.edit();
     }
 
-    String TAG = "testing";
+
 
     public void updateData() {
         //new DownloadFilesTask().execute();
@@ -106,18 +117,54 @@ public class userData {
             @Override
             public void onResponse(Call<PrayerTimesDay> call, Response<PrayerTimesDay> response) {
                 try {
+//                    Log.d(TAG, "onResponse: " + response.raw().toString());
+
                     prayerTimesDay = response.body();
 
                     Timings timing = prayerTimesDay.getData().getTimings();
                     prayerTimeCards = new ArrayList<>();
-                    prayerTimeCards.add((new PrayerTimeCard("id_fajr", timing.getFajr())));
-                    prayerTimeCards.add((new PrayerTimeCard("id_sunrise", timing.getSunrise())));
-                    prayerTimeCards.add((new PrayerTimeCard("id_dhuhr", timing.getDhuhr())));
-                    prayerTimeCards.add((new PrayerTimeCard("id_asr", timing.getAsr())));
-                    prayerTimeCards.add((new PrayerTimeCard("id_maghrib", timing.getMaghrib())));
-                    prayerTimeCards.add((new PrayerTimeCard("id_ishaa", timing.getIsha())));
+                    prayerTimeCards.add((new PrayerTimeCard(mContext.getString(R.string.id_fajr), timing.getFajr(), sharedPref.getBoolean(mContext.getString(R.string.id_fajr), true))));
+                    prayerTimeCards.add((new PrayerTimeCard(mContext.getString(R.string.id_sunrise), timing.getSunrise(), sharedPref.getBoolean(mContext.getString(R.string.id_sunrise), true))));
+                    prayerTimeCards.add((new PrayerTimeCard(mContext.getString(R.string.id_dhuhr), timing.getDhuhr(), sharedPref.getBoolean(mContext.getString(R.string.id_dhuhr), true))));
+                    prayerTimeCards.add((new PrayerTimeCard(mContext.getString(R.string.id_asr), timing.getAsr(), sharedPref.getBoolean(mContext.getString(R.string.id_asr), true))));
+                    prayerTimeCards.add((new PrayerTimeCard(mContext.getString(R.string.id_maghrib), timing.getMaghrib(), sharedPref.getBoolean(mContext.getString(R.string.id_maghrib), true))));
+                    prayerTimeCards.add((new PrayerTimeCard(mContext.getString(R.string.id_ishaa), timing.getIsha(), sharedPref.getBoolean(mContext.getString(R.string.id_ishaa), true))));
 
-                    Log.d(TAG, "onResponse: " + response.raw().toString());
+                    String currentTime = todayDate + " " + currentTime();
+                    Calendar currentCalendar = StringToCalendar(currentTime);
+
+                    for(int i=0; i<prayerTimeCards.size(); i++){
+                        int pPrevious = i;
+                        String previous = combinePrayerDateTime(todayDate, prayerTimeCards.get(pPrevious).time);
+                        Calendar previousCalendar = StringToCalendar(previous);
+
+                        int pNext = i+1;
+                        String next = "";
+                        if(pNext >= prayerTimeCards.size()) {
+                            pNext = 0;
+                            next = combinePrayerDateTime(tomorrowDate, prayerTimeCards.get(pNext).time);
+                        }
+                        else
+                            next = combinePrayerDateTime(todayDate, prayerTimeCards.get(pNext).time);
+
+                        Calendar nextCalendar = StringToCalendar(next);
+
+                        boolean isBefore = previousCalendar.before(currentCalendar);
+                        boolean isAfter = nextCalendar.after(currentCalendar);
+
+                        if(isBefore && isAfter){
+                            prayerTimeCards.get(pPrevious).setStatus(PrayerTimeCard.Status.NOW);
+                            prayerTimeCards.get(pNext).setStatus(PrayerTimeCard.Status.NEXT);
+
+                            if(prayerTimeCards.get(pPrevious).solat == mContext.getString(R.string.id_sunrise)){
+                                prayerTimeCards.get(pPrevious).setStatus(PrayerTimeCard.Status.PAST);
+                            }
+
+                            prayerTimeCards.get(pNext).addInfo(timeBetween(currentCalendar.getTime(), nextCalendar.getTime()));
+                        }
+                    }
+
+
 
                 } catch (Exception e) {
                     Log.d(TAG, "There is an error");
@@ -265,61 +312,10 @@ public class userData {
         return calendar;
     }
 
-    public boolean isDateTimeAfter(String str_date1, String str_date2){
-        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm:ss");
-        Date date1 = null;
-        try {
-            date1 = sdf.parse(str_date1);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Date date2 = null;
-        try {
-            date2 = sdf.parse(str_date2);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        return date1.after(date2);
-    }
-
-    public boolean isDateTimeBefore(String str_date1, String str_date2){
-        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm:ss");
-        Date date1 = null;
-        try {
-            date1 = sdf.parse(str_date1);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Date date2 = null;
-        try {
-            date2 = sdf.parse(str_date2);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        return date1.before(date2);
-    }
-
-    public String timeBetween(String str_date1, String str_date2){
-        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm:ss");
-        Date date1 = null;
-        try {
-            date1 = sdf.parse(str_date1);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Date date2 = null;
-        try {
-            date2 = sdf.parse(str_date2);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
+    public String timeBetween(Date date1, Date date2){
         long diff = date2.getTime() - date1.getTime();
 
-        String str_time = "<font color='red'> in ";
-        SimpleDateFormat tesFormat = new SimpleDateFormat("HH:mm");
+        String str_time = " <font color='red'> in ";
 
         int diffMinutes = (int) TimeUnit.MINUTES.convert(diff, TimeUnit.MILLISECONDS);
         diffMinutes++;
@@ -443,6 +439,17 @@ public class userData {
 
     }
 
+    private String combinePrayerDateTime(String str_date, String str_time)
+    {
+        return str_date + " " + str_time + ":00";
+    }
+
+    public  void SetNotification(PrayerTimeCard card){
+        //editor.putBoolean(mContext.getString(R.string.id_fajr), checked);
+        editor.putBoolean(card.id, !card.notif);
+        editor.commit();
+        SchedulingALLNotification();
+    }
 
     private void CancelAllNotification() {
         CancelNotification(ID_fajr);
@@ -479,11 +486,6 @@ public class userData {
         PendingIntent broadcast = PendingIntent.getBroadcast(mContext, 100, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), broadcast);
-    }
-
-    private String combinePrayerDateTime(String str_date, String str_time)
-    {
-        return str_date + " " + str_time + ":00";
     }
 
     public boolean isNetworkAvailable() {

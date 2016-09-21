@@ -23,16 +23,16 @@ public class PrayerTimesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prayer_times);
 
-        prayerTimeAdapter = new PrayerTimeAdapter(userData.getInstance(this).prayerTimeCards);
-
-        llm = new LinearLayoutManager(this);
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-
-        recList = (RecyclerView) findViewById(R.id.cardList);
-        recList.setHasFixedSize(true);
-        recList.setLayoutManager(llm);
-
-        recList.setAdapter(prayerTimeAdapter);
+//        prayerTimeAdapter = new PrayerTimeAdapter(userData.getInstance(this).prayerTimeCards);
+//
+//        llm = new LinearLayoutManager(this);
+//        llm.setOrientation(LinearLayoutManager.VERTICAL);
+//
+//        recList = (RecyclerView) findViewById(R.id.cardList);
+//        recList.setHasFixedSize(true);
+//        recList.setLayoutManager(llm);
+//
+//        recList.setAdapter(prayerTimeAdapter);
 
     }
 
