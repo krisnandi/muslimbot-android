@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import java.util.List;
 
 /**
@@ -130,40 +133,35 @@ public class PrayerTimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 
     public class PrayerTimeCardViewHolder extends RecyclerView.ViewHolder {
-        protected TextView next;
-        protected TextView now;
-        protected TextView past;
-        protected TextView info;
-        protected TextView time;
-        protected CheckBox isCheck;
+        @BindView(R.id.solat_next) TextView next;
+        @BindView(R.id.solat_now) TextView now;
+        @BindView(R.id.solat_past) TextView past;
+        @BindView(R.id.solat_info) TextView info;
+        @BindView(R.id.solat_time) TextView time;
+        @BindView(R.id.solat_check) CheckBox isCheck;
 
         public PrayerTimeCardViewHolder(View v) {
             super(v);
-            next =  (TextView) v.findViewById(R.id.solat_next);
-            now = (TextView)  v.findViewById(R.id.solat_now);
-            past = (TextView)  v.findViewById(R.id.solat_psst);
-            info = (TextView) v.findViewById(R.id.solat_info);
-            time = (TextView) v.findViewById(R.id.solat_time);
-            isCheck = (CheckBox) v.findViewById(R.id.solat_check);
+            ButterKnife.bind(this, v);
         }
     }
 
     public class PrayerTimeDateViewHolder extends RecyclerView.ViewHolder {
-        protected TextView info;
+        @BindView(R.id.textCalender) TextView info;
 
         public PrayerTimeDateViewHolder(View v) {
             super(v);
-            info = (TextView) v.findViewById(R.id.textCalender);
+            ButterKnife.bind(this, v);
         }
     }
 
     public class PrayerTimeLocationViewHolder extends RecyclerView.ViewHolder {
 
-        protected TextView info;
+        @BindView(R.id.textLocation) TextView info;
 
         public PrayerTimeLocationViewHolder(View v) {
             super(v);
-            info = (TextView) v.findViewById(R.id.textLocation);
+            ButterKnife.bind(this, v);
         }
     }
 }

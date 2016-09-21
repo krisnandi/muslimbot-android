@@ -16,27 +16,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.CheckBox;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 
 public class MainActivity extends AppCompatActivity implements LocationListener, DelegateBehaviour {
 
     private final MyTimeChangeReceiver myTimeChangeReceiver = new MyTimeChangeReceiver();
 
-    SharedPreferences sharedPref;// = getPreferences(Context.MODE_PRIVATE);
-    SharedPreferences.Editor editor;// = sharedPref.edit();
+    SharedPreferences sharedPref;
+    SharedPreferences.Editor editor;
 
     String TAG = "testing";
 
@@ -46,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
         setContentView(R.layout.activity_main);
 
-        ButterKnife.bind(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
